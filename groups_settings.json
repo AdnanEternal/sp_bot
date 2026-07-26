@@ -58,11 +58,10 @@
       "پی چک",
       "پیچک",
       "پیوچک",
-      "پی‌چک",
+      "پی‌چک"
     ],
     "blocked_media": [],
-    "user_warnings": {
-    },
+    "user_warnings": {},
     "llm_settings": {
       "use_custom_llm": false,
       "is_verified": false,
@@ -96,7 +95,9 @@
     "admins": [
       "68989935"
     ],
-    "blocked_words": [],
+    "blocked_words": [
+      "کیرم دهنت"
+    ],
     "blocked_media": [
       "144298809417689743",
       "144352686303576502"
