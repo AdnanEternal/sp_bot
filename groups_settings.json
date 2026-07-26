@@ -1,0 +1,145 @@
+{
+  "-1000023094346": {
+    "admins": [],
+    "blocked_words": [
+      "لاشی",
+      "کیری",
+      "مادرجنده",
+      "حروم زاده"
+    ],
+    "blocked_media": [],
+    "user_warnings": {
+      "49245702": 553,
+      "46610253": 63
+    },
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    }
+  },
+  "-1000023125876": {
+    "admins": [
+      "68989935"
+    ],
+    "blocked_words": [
+      "فاک",
+      "فحش"
+    ],
+    "blocked_media": [
+      "144119586122368166",
+      "144119586122368538"
+    ],
+    "user_warnings": {
+      "68989935": 1
+    },
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "mute",
+      "mute_duration_hours": 1
+    }
+  },
+  "-1000022179727": {
+    "admins": [],
+    "blocked_words": [
+      "جنده",
+      "بیوچک",
+      "بیو چک",
+      "رل پی",
+      "رل پیوی"
+    ],
+    "blocked_media": [],
+    "user_warnings": {
+      "59722158": 4
+    },
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "mute",
+      "mute_duration_hours": 3
+    }
+  },
+  "-1000023267973": {
+    "admins": [],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "49245702": {
+    "admins": [],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "-1000023248985": {
+    "admins": [],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "-1000023282300": {
+    "admins": [
+      "49886803"
+    ],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  }
+}

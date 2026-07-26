@@ -1,0 +1,16 @@
+{
+    "default_llm_setting":{
+        "api_key":"sk-JcUnps6czsZz95dlsByQAXr9XPnJhWkoMMGKMXhPooij8wlg",
+        "base_url":"https://apihub.agnes-ai.com/v1/",
+        "model":"agnes-2.0-flash"
+    },
+    "key_words":{
+        "INFO_word": "راهنمای گاردی",
+        "default_call_word": "گاردی",
+        "default_install_word":"نصب ربات",
+        "add_admin_word":"اد ادمین"
+    },
+    "developer_id":49245702
+
+
+}
