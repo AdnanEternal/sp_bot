@@ -54,11 +54,14 @@
       "بیوچک",
       "بیو چک",
       "رل پی",
-      "رل پیوی"
+      "رل پیوی",
+      "پی چک",
+      "پیچک",
+      "پیوچک",
+      "پی‌چک",
     ],
     "blocked_media": [],
     "user_warnings": {
-      "59722158": 4
     },
     "llm_settings": {
       "use_custom_llm": false,
@@ -69,7 +72,7 @@
     },
     "punishment_settings": {
       "type": "mute",
-      "mute_duration_hours": 3
+      "mute_duration_hours": 24
     }
   },
   "-1000023267973": {
@@ -90,9 +93,14 @@
     }
   },
   "49245702": {
-    "admins": [],
+    "admins": [
+      "68989935"
+    ],
     "blocked_words": [],
-    "blocked_media": [],
+    "blocked_media": [
+      "144298809417689743",
+      "144352686303576502"
+    ],
     "user_warnings": {},
     "llm_settings": {
       "use_custom_llm": false,
@@ -127,6 +135,111 @@
     "admins": [
       "49886803"
     ],
+    "blocked_words": [
+      "ی گارززدیکصخل",
+      "33333"
+    ],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "46610253": {
+    "admins": [],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "777000": {
+    "admins": [],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "68989935": {
+    "admins": [],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "49886803": {
+    "admins": [],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "58617826": {
+    "admins": [],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "65246121": {
+    "admins": [],
     "blocked_words": [],
     "blocked_media": [],
     "user_warnings": {},

@@ -133,6 +133,18 @@ class GroupManager:
     
         
     async def add_blocked_content(self,event):
+        if 'لغو فیلتر کلمه ی' in event.raw_text or 'لغو فیلتر کلمه' in event.raw_text:
+            target_word = event.raw_text.replace('لغو فیلتر کلمه ی', '').replace('لغو فیلتر کلمه', '').strip()
+            if not target_word:
+                await event.reply("❗کلمه‌ای که میخوای از فیلتر خارج کنی رو بنویس.\nمثال: لغو فیلتر کلمه ی سلام")
+                return
+            status = self.setting.remove_from_group_settings(event.chat_id, 'blocked_words', target_word)
+            if status:
+                await event.reply(f"✅ کلمه‌ی «{target_word}» از فیلتر خارج شد.")
+            else:
+                await event.reply(f"❗همچین کلمه‌ای توی لیست فیلتر نبود.")
+            return
+        
         if event.raw_text == 'فیلتر محتوا':
             if event.reply_to == None:
                 alert_text="""📒راهنمای دستور فیلتر محتوا:
@@ -149,6 +161,12 @@ class GroupManager:
 
         if 'فیلتر کلمه' in event.raw_text or 'فیلتر کلمه ی' in event.raw_text:
             target_word=event.raw_text.replace('فیلتر کلمه ی','').replace('فیلتر کلمه','')
+            if target_word == '':
+                alert_text="""📒راهنمای دستور فیلتر کلمه:
+برای استفاده از این دستور بعد از نوشتن جمله ی فیلتر کلمه کلمه ی مورد نظر خود را بنویسید \n
+📌نکته:این دستور جزو دستور های ویژه هست و فقط ادمین های ربات میتوانند از این دستور استفاده کنند"""
+                await event.reply(alert_text)
+                return
             parts = event.raw_text.split()
             if len(parts)>8 or len(event.raw_text)>50:
                 alert_text="""❗جمله ی انتخاب شده برای فیلتر کردن بیش از حد طولانی است"""

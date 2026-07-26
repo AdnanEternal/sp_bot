@@ -183,6 +183,15 @@ class SoroushBot:
 
         
         if utils.is_sender_bot_admin(event):
+            if event.raw_text == 'لیست فیلتر':
+                words = self.setting.get_group_settings(event.chat_id)['blocked_words']
+                if not words:
+                    await event.reply("هیچ کلمه‌ای فیلتر نشده.")
+                else:
+                    text = "📋 کلمات فیلتر شده:\n" + "\n".join(f"- {w}" for w in words)
+                    await event.reply(text)
+                return
+            
             if event.raw_text.startswith('مجازات'):
                 parts = event.raw_text.split()
                 if len(parts) >= 2:

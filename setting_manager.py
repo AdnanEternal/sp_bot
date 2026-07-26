@@ -29,7 +29,18 @@ class SettingsManager:
             data[group_id] = []
             save_settings(data, self.bot_memory)
         return data[group_id]
-
+    def remove_from_group_settings(self, group_id, keyword, valeu):
+        group_id = str(group_id)
+        valeu = str(valeu).strip()
+        settings = self.get_group_settings(group_id)
+        if valeu not in settings[keyword]:
+            return False
+        settings[keyword].remove(valeu)
+        data = load_settings(self.group_settings_path)
+        data[group_id] = settings
+        save_settings(data, self.group_settings_path)
+        return True
+    
     def update_bot_memory(self, user_id, event, role: str, content: str, max_length: int = 200):
         group_id = str(event.chat_id)
         memory = self.get_bot_memory(event)
