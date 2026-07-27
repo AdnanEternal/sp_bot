@@ -22,7 +22,7 @@
     }
   },
   "-1000023125876": {
-    "max_warning_before_ban": 5,
+    "max_warning_before_ban": 4,
     "admins": [],
     "blocked_words": [
       "فاک",
@@ -41,9 +41,7 @@
       "144292212158396924",
       "144398865894087713"
     ],
-    "user_warnings": {
-      "68989935": 4
-    },
+    "user_warnings": {},
     "llm_settings": {
       "use_custom_llm": false,
       "is_verified": false,

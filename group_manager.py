@@ -26,7 +26,7 @@ class GroupManager:
     async def list_violators(self, event):
         settings = self.setting.get_group_settings(event.chat_id)
         warnings_dict = settings['user_warnings']
-        max_warnings = settings.get('max_warnings', 5)
+        max_warnings = settings.get('max_warning_before_ban', 5)
 
         if not warnings_dict:
             await event.reply("✅ هیچ کاربر متخلفی ثبت نشده.")
@@ -44,16 +44,17 @@ class GroupManager:
 
     async def set_max_warnings(self, event):
         parts = event.raw_text.split()
-        if len(parts) != 2 or not parts[1].isdigit():
+        if len(parts) != 3 or not parts[2].isdigit():
             await event.reply("❗فرمت درست: حداکثر اخطار [عدد]\nمثال: حداکثر اخطار 5")
             return
 
-        count = int(parts[1])
+        print(parts[2])
+        count = int(parts[2])
         if count < 1 or count > 50:
             await event.reply("❗عدد باید بین ۱ تا ۵۰ باشه.")
             return
 
-        self.setting.update_group_setting(event.chat_id, 'max_warnings', count)
+        self.setting.update_group_setting(event.chat_id, 'max_warning_before_ban', count)
         await event.reply(f"✅ حداکثر اخطار قبل از مجازات روی {count} تنظیم شد.")
 
 
@@ -76,11 +77,12 @@ class GroupManager:
 
     async def _resolve_target_user(self, event):
         parts = event.raw_text.split()
+        print(parts[2])
         if event.reply_to:
             replied_msg = await self.sp_client.get_messages(event.chat_id, ids=event.reply_to_msg_id)
-            return replied_msg.sender_id, parts[1:] 
-        if len(parts) >= 2 and parts[1].startswith('@'):
-            username = parts[1].replace('@', '')
+            return replied_msg.sender_id, parts[2:] 
+        if len(parts) == 3 and parts[2].startswith('@'):
+            username = parts[2].replace('@', '')
             try:
                 user = await self.sp_client.get_entity(username)
                 return user.id, parts[2:]
