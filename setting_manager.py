@@ -35,7 +35,12 @@ class SettingsManager:
         settings = self.get_group_settings(group_id)
         if valeu not in settings[keyword]:
             return False
-        settings[keyword].remove(valeu)
+        if isinstance(settings[keyword],list):
+            
+            settings[keyword].remove(valeu)
+            
+        if isinstance(settings[keyword],dict):
+            del settings[keyword]
         data = load_settings(self.group_settings_path)
         data[group_id] = settings
         save_settings(data, self.group_settings_path)

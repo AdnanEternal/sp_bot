@@ -22,12 +22,103 @@ class GroupManager:
         
 
 
+    async def _resolve_target_user(self, event):
+        parts = event.raw_text.split()
+        if event.reply_to:
+            replied_msg = await self.sp_client.get_messages(event.chat_id, ids=event.reply_to_msg_id)
+            return replied_msg.sender_id, parts[1:] 
+        if len(parts) >= 2 and parts[1].startswith('@'):
+            username = parts[1].replace('@', '')
+            try:
+                user = await self.sp_client.get_entity(username)
+                return user.id, parts[2:]
+            except Exception:
+                return None, None
+        return None, None
 
+    async def _get_display_name(self, user_id):
+        try:
+            entity = await self.sp_client.get_entity(user_id)
+            return '@' + entity.username if entity.username else entity.first_name
+        except Exception:
+            return str(user_id)
+
+    async def mute_user_command(self, event):
+        target_id, args = await self._resolve_target_user(event)
+        if target_id is None:
+            await event.reply(
+            "❗فرمت درست:\nمیوت @username [تعداد ساعت]\n"
+            "یا روی پیام کاربر ریپلای کن و بنویس: میوت [تعداد ساعت]"
+        )
+            return
+        hours = 1
+        if args and args[0].isdigit():
+            hours = int(args[0])
+        if hours <= 0 or hours > 720:  # سقف ۳۰ روز، برای جلوگیری از عدد اشتباه/بیش از حد
+            await event.reply("❗تعداد ساعت باید بین ۱ تا ۷۲۰ (۳۰ روز) باشه.")
+            return
+        name = await self._get_display_name(target_id)
+        until_date = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=hours)
+        try:
+            await self.sp_client.edit_permissions(
+            event.chat_id,
+            target_id,
+            send_messages=False,
+            until_date=until_date,
+        )
+            await event.reply(f"🔇 کاربر {name} به مدت {hours} ساعت میوت شد.")
+
+        except Exception as e:
+            await event.reply("❗نتونستم کاربر رو میوت کنم. مطمئن شو ربات دسترسی ادمین داره.")
+
+    async def unmute_user_command(self, event):
+        target_id, args = await self._resolve_target_user(event)
+        if target_id is None:
+            await event.reply(
+        "❗فرمت درست:\nآنمیوت @username\nیا روی پیام کاربر ریپلای کن و بنویس: آنمیوت"
+        )
+            return
+        name = await self._get_display_name(target_id)
+
+        try:
+            await self.sp_client.edit_permissions(
+        event.chat_id,
+        target_id,
+        send_messages=True,
+    )
+            await event.reply(f"🔊 کاربر {name} آنمیوت شد.")
+        except Exception:
+            await event.reply("❗نتونستم کاربر رو آنمیوت کنم. مطمئن شو ربات دسترسی ادمین داره.")
 
     def get_group_admins(self,group_id):
         group = self.setting.get_group_settings(group_id)
         return group['admins']
+
+
         
+    def mute_user():
+        pass
+
+    def ban_user():
+        pass
+    
+    # async def un_mute_user(
+    #     self,
+    #     group_id:int,
+    #     event
+    #     ):
+    #     user_id=None
+    #     parts = event.raw_text.split()
+    #     if len(parts) == 3:
+            
+    #     status = self.setting.remove_from_group_settings(group_id, 'user_warnings', user_id)
+        # if status:
+        #     await self.sp_client.edit_permissions(
+        #         group_id,
+        #         user_id,
+        #         send_messages=True,
+        #         )
+            
 
 
     
@@ -144,6 +235,19 @@ class GroupManager:
             else:
                 await event.reply(f"❗همچین کلمه‌ای توی لیست فیلتر نبود.")
             return
+        
+        if 'لغو فیلتر محتوا' in event.raw_text:
+            target_media = event.raw_text.replace('لغو فیلتر محتوا', '').strip()
+            if not target_media:
+                await event.reply("محتوایی که میخوای از فیلتر خارج کنی رو بنویس.\nمثال: لغو فیلتر محتوا 123456789")
+                return
+            status = self.setting.remove_from_group_settings(event.chat_id, 'blocked_media', target_media)
+            if status:
+                await event.reply(f"✅ محتوای «{target_media}» از فیلتر خارج شد.")
+            else:
+                await event.reply(f"❗همچین شناسه ی محتوایی توی لیست فیلتر نبود.")
+            return
+
         
         if event.raw_text == 'فیلتر محتوا':
             if event.reply_to == None:

@@ -171,72 +171,91 @@ class SoroushBot:
 
     
     async def _event_handler(self, event):
-        me=await self.sp_client.get_me()
+        try:
+            me=await self.sp_client.get_me()
 
-        if event.sender_id == me.id:
-            return
-        
-        if "گاردی" in event.raw_text or await utils.is_reply_to_bot(event,self.sp_client):
-            await self.agent_manager.bot_handler(event)
-            
-
-
-        
-        if utils.is_sender_bot_admin(event):
-            if event.raw_text == 'لیست فیلتر':
-                words = self.setting.get_group_settings(event.chat_id)['blocked_words']
-                if not words:
-                    await event.reply("هیچ کلمه‌ای فیلتر نشده.")
-                else:
-                    text = "📋 کلمات فیلتر شده:\n" + "\n".join(f"- {w}" for w in words)
-                    await event.reply(text)
+            if event.sender_id == me.id:
                 return
             
-            if event.raw_text.startswith('مجازات'):
-                parts = event.raw_text.split()
-                if len(parts) >= 2:
-                    if parts[1] == 'بن':
-                        self.setting.update_group_dict(event.chat_id, 'punishment_settings', 'type', 'ban')
-                        await event.reply("✅ مجازات تخلف روی «بن» تنظیم شد.")
-                    elif parts[1] == 'میوت' and len(parts) == 3 and parts[2].isdigit():
-                        hours = int(parts[2])
-                        self.setting.update_group_dict(event.chat_id, 'punishment_settings', 'type', 'mute')
-                        self.setting.update_group_dict(event.chat_id, 'punishment_settings', 'mute_duration_hours', hours)
-                        await event.reply(f"✅ مجازات تخلف روی «میوت {hours} ساعته» تنظیم شد.")
+            if "گاردی" in event.raw_text or await utils.is_reply_to_bot(event,self.sp_client):
+                await self.agent_manager.bot_handler(event)
+                
+
+
+            
+            if utils.is_sender_bot_admin(event):
+                if event.raw_text == 'لیست فیلتر':
+                    media = self.setting.get_group_settings(event.chat_id)['blocked_words']
+                    if not media:
+                        await event.reply("هیچ کلمه‌ای فیلتر نشده.")
                     else:
-                        await event.reply("❗فرمت درست: مجازات بن  یا  مجازات میوت [عدد ساعت]")
+                        text = "📋 کلمات فیلتر شده:\n" + "\n".join(f"- {m}" for m in media)
+                        await event.reply(text)
+                    return
+                
+                if event.raw_text == 'لیست فیلتر محتوا':
+                    media = self.setting.get_group_settings(event.chat_id)['blocked_media']
+                    if not media:
+                        await event.reply("هیچ محتوایی فیلتر نشده.")
+                    else:
+                        text = "📋 محتوای فیلتر شده:\n" + "\n".join(f"- {m}" for m in media)
+                        await event.reply(text)
+                    return
+                
+                if event.raw_text.startswith('میوت'):
+                    await self.group_manger.mute_user_command(event)
 
-                        
-            add_admin_word=self.setting.get_base_setting()['key_words']['add_admin_word']
-            if add_admin_word in event.raw_text:
-                parts = event.raw_text.split()
-                if len(parts) == 3:
-                    target_username = parts[-1].replace("@", "")
-                    
-                    try:
-                        user = await self.sp_client.get_entity(target_username)
-                        status=self.setting.add_to_group_settings(event.chat_id,'admins',user.id)
-                        if status:
-                            alert_text = f"""کاربر {user.username} اکنون دسترسی ویژه به گاردی داد✅"""
-                            await event.reply(alert_text)
+                elif event.raw_text.startswith('آنمیوت') or event.raw_text.startswith('آن میوت') or event.raw_text.startswith('ان میوت') or event.raw_text.startswith('انمیوت'):
+                    await self.group_manger.unmute_user_command(event)
+                
+                if event.raw_text.startswith('مجازات'):
+                    parts = event.raw_text.split()
+                    if len(parts) >= 2:
+                        if parts[1] == 'بن':
+                            self.setting.update_group_dict(event.chat_id, 'punishment_settings', 'type', 'ban')
+                            await event.reply("✅ مجازات تخلف روی «بن» تنظیم شد.")
+                        elif parts[1] == 'میوت' and len(parts) == 3 and parts[2].isdigit():
+                            hours = int(parts[2])
+                            self.setting.update_group_dict(event.chat_id, 'punishment_settings', 'type', 'mute')
+                            self.setting.update_group_dict(event.chat_id, 'punishment_settings', 'mute_duration_hours', hours)
+                            await event.reply(f"✅ مجازات تخلف روی «میوت {hours} ساعته» تنظیم شد.")
                         else:
-                            alert_text=f"""❗عملیات ناموفق❗\n\n❕کاربر {user.username} در حال حاضر ادمین هست"""
+                            await event.reply("❗فرمت درست: مجازات بن  یا  مجازات میوت [عدد ساعت]")
+
+                            
+                add_admin_word=self.setting.get_base_setting()['key_words']['add_admin_word']
+                if add_admin_word in event.raw_text:
+                    parts = event.raw_text.split()
+                    if len(parts) == 3:
+                        target_username = parts[-1].replace("@", "")
+                        
+                        try:
+                            user = await self.sp_client.get_entity(target_username)
+                            status=self.setting.add_to_group_settings(event.chat_id,'admins',user.id)
+                            if status:
+                                alert_text = f"""کاربر {user.username} اکنون دسترسی ویژه به گاردی داد✅"""
+                                await event.reply(alert_text)
+                            else:
+                                alert_text=f"""❗عملیات ناموفق❗\n\n❕کاربر {user.username} در حال حاضر ادمین هست"""
+                                await event.reply(alert_text)
+
+                        except:
+                            alert_text="""❗خطا❗\n⚠️لطفا چک کنید نام کاربری را به درستی وارد کرده اید.\n\n✅مثال:\nاد ادمین @EternalBot"""
                             await event.reply(alert_text)
 
-                    except:
-                        alert_text="""❗خطا❗\n⚠️لطفا چک کنید نام کاربری را به درستی وارد کرده اید.\n\n✅مثال:\nاد ادمین @EternalBot"""
-                        await event.reply(alert_text)
-            await self.group_manger.add_blocked_content(event)
 
-            
+                await self.group_manger.add_blocked_content(event)
 
-        inappropriate_message=await self.group_manger.is_inappropriate_content(event)
-        if inappropriate_message:
+                
 
-            await self.sp_client.delete_messages(event.chat_id,event.id)
-            
-            await self.group_manger.handle_violation(event,event.sender_id,inappropriate_message)
+            inappropriate_message=await self.group_manger.is_inappropriate_content(event)
+            if inappropriate_message:
 
+                await self.sp_client.delete_messages(event.chat_id,event.id)
+                
+                await self.group_manger.handle_violation(event,event.sender_id,inappropriate_message)
+        except Exception as e:
+            print(f"⚠️ خطا در پردازش پیام: {e}")
 
 
 

@@ -56,12 +56,23 @@
       "رل پی",
       "رل پیوی",
       "پی چک",
-      "پیچک",
       "پیوچک",
-      "پی‌چک"
+      "پی‌چک",
+      "/https://splus.ir/joingroup",
+      "http://splus.ir/joingroup",
+      "splus.ir/joingroup",
+      "https://splus.ir/joingroup"
     ],
-    "blocked_media": [],
-    "user_warnings": {},
+    "blocked_media": [
+      "144292212119321496",
+      "144511017790728975"
+    ],
+    "user_warnings": {
+      "59722158": 3,
+      "67424728": 2,
+      "46610253": 4,
+      "68982691": 4
+    },
     "llm_settings": {
       "use_custom_llm": false,
       "is_verified": false,
@@ -240,6 +251,40 @@
     }
   },
   "65246121": {
+    "admins": [],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "66940120": {
+    "admins": [],
+    "blocked_words": [],
+    "blocked_media": [],
+    "user_warnings": {},
+    "llm_settings": {
+      "use_custom_llm": false,
+      "is_verified": false,
+      "api_key": "",
+      "base_url": "",
+      "model": ""
+    },
+    "punishment_settings": {
+      "type": "",
+      "mute_duration_hours": 0
+    }
+  },
+  "59722158": {
     "admins": [],
     "blocked_words": [],
     "blocked_media": [],
