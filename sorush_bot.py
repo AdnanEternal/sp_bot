@@ -184,6 +184,8 @@ class SoroushBot:
 
             
             if utils.is_sender_bot_admin(event):
+                
+
                 if event.raw_text == 'لیست فیلتر':
                     media = self.setting.get_group_settings(event.chat_id)['blocked_words']
                     if not media:
@@ -192,7 +194,15 @@ class SoroushBot:
                         text = "📋 کلمات فیلتر شده:\n" + "\n".join(f"- {m}" for m in media)
                         await event.reply(text)
                     return
-                
+                elif event.raw_text == 'لیست کاربران متخلف':
+                    await self.group_manger.list_violators(event)
+                    # self.group_manger._get_display_name(inself.setting.get_group_settings(event.chat_id)[1])
+
+                elif event.raw_text.startswith('حداکثر اخطار'):
+                    await self.group_manger.set_max_warnings(event)
+
+                elif event.raw_text.startswith('حذف تخلف'):
+                    await self.group_manger.remove_violator(event)
                 if event.raw_text == 'لیست فیلتر محتوا':
                     media = self.setting.get_group_settings(event.chat_id)['blocked_media']
                     if not media:

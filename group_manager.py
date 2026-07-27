@@ -19,7 +19,59 @@ class GroupManager:
         self.blocked_media_ids = set()
         
         self.setting= setting_manager.SettingsManager()
-        
+
+
+
+
+    async def list_violators(self, event):
+        settings = self.setting.get_group_settings(event.chat_id)
+        warnings_dict = settings['user_warnings']
+        max_warnings = settings.get('max_warnings', 5)
+
+        if not warnings_dict:
+            await event.reply("✅ هیچ کاربر متخلفی ثبت نشده.")
+            return
+
+        lines = []
+        for user_id_str, remaining in warnings_dict.items():
+            name = await self._get_display_name(int(user_id_str))
+            violations = max(0, max_warnings - remaining)
+            lines.append(f"👤 کاربر {name} : {violations} تخلف.")
+
+        text = "📋 لیست کاربران متخلف:\n\n" + "\n".join(lines) +f"\nسقف مجاز تخلف برای هر کاربر: { max_warnings}"
+        await event.reply(text)
+
+
+    async def set_max_warnings(self, event):
+        parts = event.raw_text.split()
+        if len(parts) != 2 or not parts[1].isdigit():
+            await event.reply("❗فرمت درست: حداکثر اخطار [عدد]\nمثال: حداکثر اخطار 5")
+            return
+
+        count = int(parts[1])
+        if count < 1 or count > 50:
+            await event.reply("❗عدد باید بین ۱ تا ۵۰ باشه.")
+            return
+
+        self.setting.update_group_setting(event.chat_id, 'max_warnings', count)
+        await event.reply(f"✅ حداکثر اخطار قبل از مجازات روی {count} تنظیم شد.")
+
+
+    async def remove_violator(self, event):
+        target_id, _ = await self._resolve_target_user(event)
+        if target_id is None:
+            await event.reply(
+                "❗فرمت درست:\nحذف تخلف @username\nیا روی پیام کاربر ریپلای کن و بنویس: حذف تخلف"
+            )
+            return
+
+        name = await self._get_display_name(target_id)
+        status = self.setting.remove_from_group_dict(event.chat_id, 'user_warnings', target_id)
+
+        if status:
+            await event.reply(f"✅ سابقه‌ی تخلف {name} پاک شد.")
+        else:
+            await event.reply(f"ℹ️ {name} سابقه‌ی تخلفی نداشت.")
 
 
     async def _resolve_target_user(self, event):
@@ -169,10 +221,10 @@ class GroupManager:
         else:
             violator_name = event.sender.first_name
 
-        MAX_WARNINGS_BEFORE_BAN = 5
+
 
         # همیشه با .get و مقدار پیش‌فرض کار کن، نه با "in"
-        current_warnings = violators_list.get(str(user_id), MAX_WARNINGS_BEFORE_BAN)
+        current_warnings = violators_list.get(str(user_id), self.setting.get_group_settings(event.chat_id)['max_warning_before_ban'])
 
         if current_warnings <= 1:
             await self.punish_user(
@@ -180,7 +232,7 @@ class GroupManager:
                 event.chat_id,
                 event
             )
-            new_warnings = MAX_WARNINGS_BEFORE_BAN
+            self.setting.remove_from_group_dict(event.chat_id,'user_warnings',str(user_id))
             return
         else:
             new_warnings = current_warnings - 1
@@ -289,6 +341,7 @@ class GroupManager:
 
         if 'فیلتر کلمه' in event.raw_text or 'فیلتر کلمه ی' in event.raw_text:
             target_word=event.raw_text.replace('فیلتر کلمه ی','').replace('فیلتر کلمه','')
+            
             if target_word == '':
                 alert_text="""📒راهنمای دستور فیلتر کلمه:
 برای استفاده از این دستور بعد از نوشتن جمله ی فیلتر کلمه کلمه ی مورد نظر خود را بنویسید \n

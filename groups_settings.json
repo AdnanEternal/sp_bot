@@ -1,5 +1,6 @@
 {
   "-1000023094346": {
+    "max_warning_before_ban": 5,
     "admins": [],
     "blocked_words": [
       "لاشی",
@@ -21,9 +22,8 @@
     }
   },
   "-1000023125876": {
-    "admins": [
-      "68989935"
-    ],
+    "max_warning_before_ban": 5,
+    "admins": [],
     "blocked_words": [
       "فاک",
       "فحش"
@@ -42,7 +42,7 @@
       "144398865894087713"
     ],
     "user_warnings": {
-      "68989935": 1
+      "68989935": 4
     },
     "llm_settings": {
       "use_custom_llm": false,
@@ -57,6 +57,7 @@
     }
   },
   "-1000022179727": {
+    "max_warning_before_ban": 5,
     "admins": [],
     "blocked_words": [
       "جنده",
@@ -98,6 +99,7 @@
     }
   },
   "-1000023267973": {
+    "max_warning_before_ban": 5,
     "admins": [],
     "blocked_words": [],
     "blocked_media": [],
@@ -139,6 +141,7 @@
     }
   },
   "-1000023248985": {
+    "max_warning_before_ban": 5,
     "admins": [],
     "blocked_words": [],
     "blocked_media": [],
@@ -156,6 +159,7 @@
     }
   },
   "-1000023282300": {
+    "max_warning_before_ban": 5,
     "admins": [
       "49886803"
     ],
