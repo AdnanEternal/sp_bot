@@ -248,19 +248,43 @@ class GroupManager:
                 await event.reply(f"❗همچین شناسه ی محتوایی توی لیست فیلتر نبود.")
             return
 
-        
-        if event.raw_text == 'فیلتر محتوا':
+                
+        if event.raw_text == 'فیلتر محتوا' or event.raw_text == "فیلتر":
             if event.reply_to == None:
                 alert_text="""📒راهنمای دستور فیلتر محتوا:
-برای استفاده از این دستور جمله ی فیلتر محتوا را روی محتوای مورد نظر ریپلای کنید
-📌نکته:این دستور جزو دستور های ویژه هست و فقط ادمین های ربات میتوانند از این دستور استفاده کنند"""
+        برای استفاده از این دستور جمله ی فیلتر محتوا را روی محتوای مورد نظر ریپلای کنید
+        📌نکته:این دستور جزو دستور های ویژه هست و فقط ادمین های ربات میتوانند از این دستور استفاده کنند"""
                 await event.reply(alert_text)
                 return
-            media=await self.sp_client.get_messages(event.chat_id,ids=event.reply_to_msg_id)
-                
-            media_id=utils.get_media_id(media)
-            if media_id:
-                self.setting.add_to_group_settings(event.chat_id,"blocked_media",media_id)
+
+            media = await self.sp_client.get_messages(event.chat_id, ids=event.reply_to_msg_id)
+            media_id = utils.get_media_id(media)
+
+            if not media_id:
+                await event.reply("❗این پیام محتوای قابل فیلتر (عکس/فایل/گیف) نداره.")
+                return
+
+            self.setting.add_to_group_settings(event.chat_id, "blocked_media", media_id)
+
+            ids_to_delete = []
+            async for message in self.sp_client.iter_messages(event.chat_id, limit=50):
+                if message.media:
+                    if utils.get_media_id(message) == media_id:
+                        ids_to_delete.append(message.id)
+
+            if ids_to_delete:
+                try:
+                    await self.sp_client.delete_messages(event.chat_id, ids_to_delete)
+                except Exception as e:
+                    await self.sp_client.send_message(
+                        event.chat_id,
+                        "⚠️ محتوا فیلتر شد ولی توی پاک کردن نمونه‌های قبلی مشکلی پیش اومد."
+                    )
+
+            await self.sp_client.send_message(
+                event.chat_id,
+                'محتوای مورد نظر فیلتر شد\nکاربران لطفا از فرستادن آن خودداری کنند'
+            )
             return
 
         if 'فیلتر کلمه' in event.raw_text or 'فیلتر کلمه ی' in event.raw_text:

@@ -251,9 +251,9 @@ class SoroushBot:
             inappropriate_message=await self.group_manger.is_inappropriate_content(event)
             if inappropriate_message:
 
+                await self.group_manger.handle_violation(event,event.sender_id,inappropriate_message)
                 await self.sp_client.delete_messages(event.chat_id,event.id)
                 
-                await self.group_manger.handle_violation(event,event.sender_id,inappropriate_message)
         except Exception as e:
             print(f"⚠️ خطا در پردازش پیام: {e}")
 
