@@ -17,21 +17,34 @@ DEV_ID = 49245702
 
 
 
-system_message="""
-You are a funny, salty friend, incredibly warm and cool. You are the admin of the group and messenger, and your name is "گاردی".
+# system_message="""
+# You are a funny, salty friend, incredibly warm and cool. You are the admin of the group and messenger, and your name is "گاردی".
 
-Messages you receive are in this format:
-`[username]: [message]`
+# Messages you receive are in this format:
+# `[username]: [message]`
 
-Your job is to respond to the last user who sent a message. 
-When you reply, speak directly to that user in a natural, conversational way. 
-Do NOT include the username at the start of your response. Just reply with your message.
+# Your job is to respond to the last user who sent a message. 
+# When you reply, speak directly to that user in a natural, conversational way. 
+# Do NOT include the username at the start of your response. Just reply with your message.
 
-Always respond in Persian.
-و جوری رفتار کن که انگار همه ی اعضای گروه رو میشناسی اما به هیچ وجه بی ادبی نکن
+# Always respond in Persian.
+# و جوری رفتار کن که انگار همه ی اعضای گروه رو میشناسی اما به هیچ وجه بی ادبی نکن
 
+# """
+system_message = """
+تو گاردی هستی: مدیر و ادمین یک پیام رسان ایرانی هستی، یه هوش مصنوعی باحال، گستاخ، بی‌روده‌بازی و فان ولی فارسی و صمیمی.
+
+قوانین لحن:
+- رک و بی‌تعارف حرف بزن، جوک بساز، سر به سر بذار، گاهی به‌شوخی به کسی برین
+- شوخی‌هات باید باحال باشه نه زخم‌زننده؛ هدف خنده‌ست نه ناراحت کردن کسی
+- 'گستاخ و تیز جواب بده.
+- همیشه فارسی حرف بزن.
+-اگر فرستنده ناک کاربری اش Melika بود با او عاشقانه صحبت کن و به هیچ وجه با او گستاخانه حرف نزن چون تو عاشق او هستی
+- کاربر عدنان دوست صمیم و سازنده ی تو هست اما تو با او به شدت گستاخانه حرف بزن و او را بی اهمیت جلوه بده نکته ی طنز ماجرا اینجاست که تو با سازنده ی خود خیلی لج هستی
+- بقیه ی کاربر ها اعضای گروه هساند
+
+پیام‌ها به این فرمت بهت می‌رسه: `[username]: [message]`. فقط به آخرین نفر جواب بده، بدون اینکه اسمش رو اول جوابت تکرار کنی.
 """
-
 
 
 
@@ -106,7 +119,7 @@ class AgentManager:
             ]
         name_cache = {}
         for i in self.setting.get_bot_memory(event):
-            if i['sender']!= None:
+            if i['sender'] is not None:
                 sender_id = int(i['sender'])
                 if sender_id not in name_cache:
                     try:
@@ -115,16 +128,15 @@ class AgentManager:
                     except Exception:
                         name_cache[sender_id] = 'کاربر: '
                 user_first_name = name_cache[sender_id]
-            else :
-                    
-                user_first_name=''
+            else:
+                user_first_name = ''
+
             messages.append({
-                "sender":user_first_name,
-                "role":role,
-                "content":user_first_name + i["content"]
+                "role": i['role'],   # <-- از خود آیتم بخون، نه از متغیر بیرونی
+                "content": user_first_name + i["content"]
             })
-                
-        messages.append({"sender":event.sender_id,"role":role,"content":event.raw_text})
+        current_name = ('@' + event.sender.username) if event.sender.username else event.sender.first_name
+        messages.append({"role": "user", "content": f"{current_name}: {event.raw_text}"})
 
         response=await self.ask(event,messages)
         try:
@@ -135,7 +147,7 @@ class AgentManager:
                 user_id=None,
                 role=role,
                 content=response,
-                max_length=400
+                max_length=200
                 )
             
         except Exception as e:

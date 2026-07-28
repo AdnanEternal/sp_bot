@@ -13,9 +13,9 @@ runtime:
   
 commands:
   build:
-    - "pip install splusthon"
-    - "pip install openai"
-    - "pip install requests"
+    - "pip install SPlusthon==1.1.4"
+    - "pip install openai==2.45.0"
+    - "pip install requests==2.32.5"
   start: "python sorush_bot.py"
 
 repository:
