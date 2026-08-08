@@ -2,11 +2,14 @@ import asyncio
 from openai import OpenAI
 from splusthon import SoroushClient, events
 from splusthon.sessions import StringSession
-import group_manager
-import setting_manager as setting_manager
+import managers.group_manager as group_manager
+import managers.setting_manager as setting_manager
 import utils
 from typing import Dict,Optional
-from backup_manager import *
+from managers.backup_manager import *
+
+from core.sp_client import SPClient
+
 BLACKLIST_FILE = "gif_blacklist.json"
 group_settings_path = 'groups_settings.json'
 
@@ -165,6 +168,8 @@ class AgentManager:
  پرامت سیستمیک قابل تنظیم باشه البته فقط برای توسعه دهنده
 
 """
+
+
 class SoroushBot:
     def __init__(self,session_string):
         self.sp_client = SoroushClient(StringSession(session_string))
@@ -264,7 +269,7 @@ class SoroushBot:
                         except:
                             alert_text="""❗خطا❗\n⚠️لطفا چک کنید نام کاربری را به درستی وارد کرده اید.\n\n✅مثال:\nاد ادمین @EternalBot"""
                             await event.reply(alert_text)
-
+                            
 
                 await self.group_manger.add_blocked_content(event)
 

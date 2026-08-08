@@ -1,19 +1,20 @@
 import json
 import os
+import aiofiles
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-
-def load_settings(path):
+async def load_settings(path):
     if os.path.exists(path):
-        with open(path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+        async with aiofiles.open(path, 'r', encoding='utf-8') as f:
+            content = await f.read()
+            return json.loads(content)
     return {}
 
 
-def save_settings(data, file_path):
-    with open(file_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+async def save_settings(data, file_path):
+    async with aiofiles.open(file_path, 'w', encoding='utf-8') as f:
+        await f.write(json.dumps(data, ensure_ascii=False, indent=2))
 
 
 class SettingsManager:
@@ -77,12 +78,11 @@ class SettingsManager:
 
         if group_id not in data:
             data[group_id] = {
-                "max_warning_before_ban":5,
                 "admins": [],
                 "blocked_words": [],
                 "blocked_media": [],
                 "user_warnings": {},
-                "llm_settings": {
+                "custom_llm_settings": {
                     "use_custom_llm": False,
                     "is_verified": False,
                     "api_key": "",
@@ -90,7 +90,8 @@ class SettingsManager:
                     "model": ""
                 },
                 "punishment_settings": {
-                    "type": "",
+                    "max_warning_before_punish":5,
+                    "type": None,
                     "mute_duration_hours": 0
                 }
             }

@@ -1,7 +1,7 @@
 from splusthon import SoroushClient, events
 from splusthon.sessions import StringSession
 from splusthon.tl.types import PeerUser
-import setting_manager as setting_manager
+import managers.setting_manager as setting_manager
 setting_manager=setting_manager.SettingsManager()
 
 def get_media_id(event):

@@ -5,7 +5,7 @@ import os
 
 from openai import OpenAI
 from splusthon.tl.types import MessageEntitySpoiler
-import setting_manager as setting_manager
+import managers.setting_manager as setting_manager
 import utils
 
 import datetime
